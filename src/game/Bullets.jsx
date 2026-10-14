@@ -14,15 +14,18 @@ export default function Bullets() {
 
     for (let i = 0; i < MAX_BULLETS; i++) {
       if (i < bullets.length) {
-        dummy.position.copy(bullets[i].pos);
-        dummy.scale.setScalar(1);
+        const b = bullets[i];
+        dummy.position.copy(b.pos);
+        dummy.lookAt(b.pos.x + b.vel.x, b.pos.y + b.vel.y, b.pos.z + b.vel.z);
+        dummy.scale.set(1, 1, 8); // stretch along the direction of travel
       } else {
         dummy.scale.setScalar(0);
       }
       dummy.updateMatrix();
       mesh.setMatrixAt(i, dummy.matrix);
+
+      mesh.instanceMatrix.needsUpdate = true;
     }
-    mesh.instanceMatrix.needsUpdate = true;
   });
 
   return (
@@ -31,7 +34,7 @@ export default function Bullets() {
       args={[null, null, MAX_BULLETS]}
       frustumCulled={false}
     >
-      <sphereGeometry args={[0.15, 8, 8]} />
+      <sphereGeometry args={[0.08, 8, 8]} />
       <meshBasicMaterial color="#ffe08a" fog={false} />
     </instancedMesh>
   );
