@@ -5,7 +5,7 @@ import { consumeMouseDelta } from "../systems/input";
 import { playerState } from "../systems/playerState";
 import { getCollidables } from "../systems/collision";
 
-const SENSITIVITY = 0.002;
+const SENSITIVITY = 0.0008;
 const MIN_PITCH = -0.2;
 const MAX_PITCH = 1.2;
 const DISTANCE = 6;
@@ -26,8 +26,12 @@ export default function CameraRig() {
   useFrame((_, delta) => {
     const m = consumeMouseDelta();
     if (document.pointerLockElement === gl.domElement) {
-      yaw.current -= m.x * SENSITIVITY;
-      pitch.current += m.y * SENSITIVITY;
+      const MAX_DELTA = 60;
+
+      yaw.current -=
+        THREE.MathUtils.clamp(m.x, -MAX_DELTA, MAX_DELTA) * SENSITIVITY;
+      pitch.current +=
+        THREE.MathUtils.clamp(m.y, -MAX_DELTA, MAX_DELTA) * SENSITIVITY;
       pitch.current = THREE.MathUtils.clamp(
         pitch.current,
         MIN_PITCH,

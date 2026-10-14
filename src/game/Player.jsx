@@ -2,41 +2,32 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { getKeys } from "../systems/input";
 import { playerState } from "../systems/playerState";
+import { updateMovement } from "../systems/movement";
 
 export default function Player() {
-  const meshRef = useRef();
+  const groupRef = useRef();
 
   useFrame((_, delta) => {
-    const keys = getKeys();
-    const p = playerState;
+    updateMovement(playerState, getKeys(), delta);
 
-    let x = 0;
-    let z = 0;
-
-    if (keys.forward) z -= 1;
-    if (keys.backward) z += 1;
-    if (keys.left) x -= 1;
-    if (keys.right) x += 1;
-
-    const len = Math.hypot(x, z);
-    if (len > 0) {
-      x /= len;
-      z /= len;
-    }
-
-    const speed = 5;
-    p.position[0] += x * speed * delta;
-    p.position[2] += z * speed * delta;
-
-    if (meshRef.current) {
-      meshRef.current.position.set(p.position[0], p.position[1], p.position[2]);
+    const g = groupRef.current;
+    if (g) {
+      g.position.set(...playerState.position);
+      g.rotation.y = playerState.rotation;
     }
   });
 
   return (
-    <mesh ref={meshRef} position={[0, 1, 0]}>
-      <capsuleGeometry args={[0.5, 1, 4, 8]} />
-      <meshStandardMaterial color="orange" />
-    </mesh>
+    <group ref={groupRef} position={[0, 1, 0]}>
+      <mesh>
+        <capsuleGeometry args={[0.5, 1, 4, 8]} />
+        <meshStandardMaterial color="orange" />
+      </mesh>
+
+      <mesh position={[0, 0.4, 0.55]}>
+        <boxGeometry args={[0.3, 0.3, 0.4]} />
+        <meshStandardMaterial color="white" />
+      </mesh>
+    </group>
   );
 }
