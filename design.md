@@ -2,15 +2,15 @@
 
 ## 1. Overview
 
-A browser-native, third-person arena survival shooter where light is both the player’s weapon and resource.
+A browser-native, third-person arena survival shooter in the style of Call of Duty.
 
 ## 2. Core Loop
 
 1. Spawn into one arena.
 2. Fight escalating enemy waves.
-3. Shooting consumes light.
-4. Kills and pickups restore light.
-5. Manage aggression vs. survival.
+3. Shooting uses ammo from a magazine; reload when empty.
+4. Kills drop ammo pickups.
+5. Manage ammo, reloads and positioning to survive.
 6. Die → score screen → restart.
 
 ## 3. V1 Scope
@@ -23,7 +23,7 @@ A browser-native, third-person arena survival shooter where light is both the pl
 - Aim and shoot
 - Dash or slide
 - Health
-- Light meter
+- Ammo (magazine + reserve) and reload
 
 ### Camera
 
@@ -35,11 +35,7 @@ A browser-native, third-person arena survival shooter where light is both the pl
 
 ### Combat
 
-- One weapon
-- Bullets consume light
-- Kills drop light pickups
-- Low light reduces damage or fire rate
-- Light meter on HUD
+- One weapon with magazine and reserve ammo, Reload (R) with a reload delay, Kills drop ammo pickups, Low-ammo warning
 
 ### Enemies
 
@@ -60,12 +56,11 @@ A browser-native, third-person arena survival shooter where light is both the pl
 - One map
 - Cover objects
 - Open central fighting area
-- Lighting tied to the light mechanic
 
 ### UI
 
 - Main menu
-- HUD: health, light, score, wave
+- HUD: health, ammo, score, wave
 - Game-over screen
 - Restart
 
@@ -127,12 +122,13 @@ A browser-native, third-person arena survival shooter where light is both the pl
 ## 6. Game Constants
 
 - maxHealth = 100
-- maxLight = 100
-- shotLightCost = 5
-- passiveLightRegen = 2/sec
-- killLightReward = 15
-- pickupLightReward = 25
-- lowLightThreshold = 20
+- magSize = 30
+- startReserve = 120
+- maxReserve = 240
+- reloadTime = 1.8
+- killScore = 100
+- ammoPickupReward = 30
+- lowAmmoThreshold = 20
 
 ## 7. Camera Implementation
 
@@ -153,7 +149,7 @@ A browser-native, third-person arena survival shooter where light is both the pl
 5. First enemy + damage
 6. Health + death/restart
 7. Waves + score
-8. Light mechanic
+8. Ammo and reload
 9. Enemy variety
 10. Arena + visuals
 11. UI + game feel
@@ -200,7 +196,7 @@ GLEAMSTRIKE V1 is complete when:
 
 - A guest can open the deployed link and play without explanation.
 - Player can move, aim, shoot, kill enemies, take damage, die, and restart.
-- Light mechanic visibly affects combat decisions.
+- Ammo and reload visibly affect combat decisions.
 - Waves escalate correctly.
 - Score and high score persist.
 - Leaderboard saves valid runs.

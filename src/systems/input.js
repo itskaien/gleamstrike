@@ -12,6 +12,8 @@ const mouse = {
   firing: false,
 };
 
+let reloadQueued = false;
+
 export function setupInput() {
   const handleKeyDown = (e) => {
     if (e.code === "KeyW") keys.forward = true;
@@ -19,6 +21,7 @@ export function setupInput() {
     if (e.code === "KeyA") keys.left = true;
     if (e.code === "KeyD") keys.right = true;
     if (e.code === "Space") keys.dash = true;
+    if (e.code === "KeyR" && !e.repeat) reloadQueued = true;
     if (e.code === "KeyF" && document.pointerLockElement) mouse.firing = true;
   };
 
@@ -77,4 +80,10 @@ export function consumeMouseDelta() {
   mouse.deltaX = 0;
   mouse.deltaY = 0;
   return delta;
+}
+
+export function consumeReload() {
+  const queued = reloadQueued;
+  reloadQueued = false;
+  return queued;
 }

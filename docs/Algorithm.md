@@ -21,7 +21,7 @@ START GleamStrike
      position
      rotation
      health
-     light
+     ammo
      score
    - Add keyboard input listener
    - Add mouse input listener
@@ -60,7 +60,7 @@ START GleamStrike
    - Add shoot input
    - On shoot:
      spawn bullet or raycast from camera/player
-     consume light
+     consume ammo
      add muzzle flash
    - Add bullet movement
    - Add bullet lifespan
@@ -92,7 +92,7 @@ START GleamStrike
       show restart button
     - Restart resets:
       player health
-      light
+      ammo
       score
       wave
       enemies
@@ -105,22 +105,21 @@ START GleamStrike
     ELSE:
     fix combat loop before adding more systems
 
-12. BUILD LIGHT MECHANIC
-    - Set max light = 100
-    - Shooting consumes light
-    - Passive light regen over time
-    - Enemy kill restores light
-    - Light pickup restores more light
-    - IF light < threshold:
-      reduce weapon effectiveness
-      show low-light warning
-    - IF light <= 0:
-      block shooting until enough light regenerates
+12. BUILD AMMO + RELOAD
+    - Magazine size = 30, reserve = 120
+    - Shooting consumes 1 round
+    - Reload key (R) refills the magazine from reserve after a delay
+    - IF magazine empty:
+      auto-reload
+    - IF reserve empty AND magazine empty:
+      block shooting, show no-ammo warning
+    - Show ammo counter on HUD
+    - Show low-ammo warning
 
 13. BUILD PICKUPS
-    - Spawn light pickup when enemy dies
+    - Spawn ammo pickup when enemy dies
     - Pickup floats/rotates
-    - Player collision restores light
+    - Player collision adds to reserve
     - Remove pickup after collection
 
 14. BUILD WAVES
@@ -193,7 +192,7 @@ START GleamStrike
     - Tune movement speed
     - Tune enemy speed
     - Tune weapon damage
-    - Tune light costs and regen
+    - TTune ammo and reload time
 
 21. TEST CHECKPOINT 3
     IF full loop is fun:
@@ -272,7 +271,6 @@ START GleamStrike
 29. RECORD DEMO
     - Record 30–60 second gameplay clip
     - Show movement, shooting, light mechanic, waves, game over
-    - Save for portfolio/Upwork
 
 30. SHIP V1
     - Publish link

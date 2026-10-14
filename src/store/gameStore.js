@@ -1,7 +1,7 @@
 import { create } from "zustand";
+import { MAG_SIZE, START_RESERVE } from "../constants";
 
 const MAX_HEALTH = 100;
-const MAX_LIGHT = 100;
 const HIGH_SCORE_KEY = "gleamstrike:highScore";
 
 function loadHighScore() {
@@ -23,7 +23,9 @@ function saveHighScore(score) {
 export const useGameStore = create((set) => ({
   phase: "playing",
   health: MAX_HEALTH,
-  light: MAX_LIGHT,
+  ammo: MAG_SIZE,
+  reserve: START_RESERVE,
+  reloading: false,
   score: 0,
   wave: 1,
   damageCount: 0,
@@ -48,11 +50,7 @@ export const useGameStore = create((set) => ({
       };
     }),
 
-  consumeLight: (amount) =>
-    set((state) => ({ light: Math.max(0, state.light - amount) })),
-
-  restoreLight: (amount) =>
-    set((state) => ({ light: Math.min(MAX_LIGHT, state.light + amount) })),
+  setWeapon: (partial) => set(partial),
 
   addScore: (points) => set((state) => ({ score: state.score + points })),
 
@@ -62,7 +60,9 @@ export const useGameStore = create((set) => ({
     set((state) => ({
       phase: "playing",
       health: MAX_HEALTH,
-      light: MAX_LIGHT,
+      ammo: MAG_SIZE,
+      reserve: START_RESERVE,
+      reloading: false,
       score: 0,
       wave: 1,
       damageCount: 0,

@@ -1,17 +1,17 @@
 import * as THREE from "three";
 import { useGameStore } from "../store/gameStore";
-import { isFiring } from "./input";
+import { isFiring, consumeReload } from "./input";
 import { getCollidables, hitsWall } from "./collision";
 import { playerState } from "./playerState";
 import { damageEnemy, findBulletHit, raycastEnemies } from "./enemies";
 import { spawnBurst } from "./effects";
+import { canShoot, spendAmmo, updateAmmo } from "./ammo";
 
-const FIRE_INTERVAL = 0.15;
+const FIRE_INTERVAL = 0.12;
 const BULLET_SPEED = 80;
 const BULLET_LIFETIME = 1.5;
 const BULLET_DAMAGE = 10;
 export const MAX_BULLETS = 64;
-const SHOT_LIGHT_COST = 5;
 const AIM_RANGE = 120;
 const FLASH_TIME = 0.05;
 const AIM_HOLD = 0.4;
@@ -67,12 +67,14 @@ function shoot(camera) {
   bullets.push({ pos: muzzle.clone(), vel, life: BULLET_LIFETIME });
   if (bullets.length > MAX_BULLETS) bullets.shift();
 
-  useGameStore.getState().consumeLight(SHOT_LIGHT_COST);
+  spendAmmo();
   cooldown = FIRE_INTERVAL;
   flashTimer = FLASH_TIME;
 }
 
 export function updateCombat(camera, delta) {
+  updateAmmo(delta, consumeReload());
+
   cooldown = Math.max(0, cooldown - delta);
   flashTimer = Math.max(0, flashTimer - delta);
 
@@ -81,15 +83,8 @@ export function updateCombat(camera, delta) {
   else aimHold = Math.max(0, aimHold - delta);
   playerState.firing = aimHold > 0;
 
-  const { phase, light } = useGameStore.getState();
-  if (light < SHOT_LIGHT_COST) useGameStore.getState().restoreLight(100);
-
-  if (
-    firing &&
-    cooldown === 0 &&
-    phase === "playing" &&
-    light >= SHOT_LIGHT_COST
-  ) {
+  const { phase } = useGameStore.getState();
+  if (firing && cooldown === 0 && phase === "playing" && canShoot()) {
     shoot(camera);
   }
 

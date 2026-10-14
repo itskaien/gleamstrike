@@ -5,6 +5,7 @@ import Scene from "./game/Scene";
 import Crosshair from "./ui/Crosshair";
 import DamageFlash from "./ui/DamageFlash";
 import GameOver from "./ui/GameOver";
+import AmmoCounter from "./ui/AmmoCounter";
 
 export default function App() {
   useEffect(() => setupInput(), []);
@@ -16,6 +17,7 @@ export default function App() {
       </Canvas>
       <Crosshair />
       <DamageFlash />
+      <AmmoCounter />
       <GameOver />
     </>
   );
