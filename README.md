@@ -1,16 +1,9 @@
-# React + Vite
+### Design Inspiration & Acknowledgements
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+GleamStrike's UI/UX direction is inspired by [WAR — Tactical Shooter, Identity & Interface](https://h-idris.com/projects/war), a game UI/UX concept by [Hadjoudj Idris](https://h-idris.com/).
 
-Currently, two official plugins are available:
+The project serves as a visual reference for GleamStrike's monochromatic aesthetic, typography, layout, interface hierarchy, and consistent design language across game menus and screens.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Full credit to Hadjoudj Idris for the original design inspiration.** GleamStrike is an independent project and is not affiliated with the designer.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Original project: https://h-idris.com/projects/war

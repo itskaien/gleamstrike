@@ -28,12 +28,12 @@ export default function Player() {
     <group ref={groupRef} position={[0, 1, 0]}>
       <mesh>
         <capsuleGeometry args={[0.5, 1, 4, 8]} />
-        <meshStandardMaterial color="orange" />
+        <meshStandardMaterial color="#A6A8AA" />
       </mesh>
 
       <mesh position={[0, 0.4, 0.55]}>
         <boxGeometry args={[0.3, 0.3, 0.4]} />
-        <meshStandardMaterial color="white" />
+        <meshStandardMaterial color="#F0F0EC" />
       </mesh>
 
       <mesh ref={flashRef} position={[0, 0.4, 0.9]} visible={false}>
