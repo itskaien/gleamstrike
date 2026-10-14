@@ -1,4 +1,4 @@
-START GLEAMSTRIKE BUILD
+START GleamStrike
 
 1. SETUP PROJECT
    - Create repo
