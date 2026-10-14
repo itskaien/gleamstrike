@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { useGameStore } from "../store/gameStore";
 import { isFiring } from "./input";
-import { getCollidables, hitsWall } from "./collision";
+import { hitsWall } from "./collision";
 import { playerState } from "./playerState";
 
 const FIRE_INTERVAL = 0.15;
@@ -9,42 +9,27 @@ const BULLET_SPEED = 60;
 const BULLET_LIFETIME = 1.5;
 export const MAX_BULLETS = 64;
 const SHOT_LIGHT_COST = 5;
-const AIM_RANGE = 100;
 const FLASH_TIME = 0.05;
 
-const bullets = [];
+const bullets = []; // each: { pos, vel, life }
 let cooldown = 0;
 let flashTimer = 0;
-
-const raycaster = new THREE.Raycaster();
-const screenCenter = new THREE.Vector2(0, 0);
-const aimPoint = new THREE.Vector3();
-const muzzle = new THREE.Vector3();
 
 export const getBullets = () => bullets;
 export const isMuzzleFlashing = () => flashTimer > 0;
 
-function shoot(camera) {
-  // 1. What is under the crosshair?
-  camera.updateMatrixWorld();
-  raycaster.setFromCamera(screenCenter, camera);
-  raycaster.far = AIM_RANGE;
-  const hits = raycaster.intersectObjects(getCollidables(), false);
-  if (hits.length > 0) aimPoint.copy(hits[0].point);
-  else raycaster.ray.at(AIM_RANGE, aimPoint); // nothing hit: aim far ahead
-
-  // 2. Gun position: chest height, just in front of the player
+function shoot() {
+  // level direction the camera is facing
   const yaw = playerState.cameraYaw;
-  const [px, py, pz] = playerState.position;
-  muzzle.set(px - Math.sin(yaw) * 0.9, py + 0.4, pz - Math.cos(yaw) * 0.9);
+  const dirX = -Math.sin(yaw);
+  const dirZ = -Math.cos(yaw);
 
-  // 3. Fire from the gun toward the aim point
-  const vel = aimPoint
-    .clone()
-    .sub(muzzle)
-    .normalize()
-    .multiplyScalar(BULLET_SPEED);
-  bullets.push({ pos: muzzle.clone(), vel, life: BULLET_LIFETIME });
+  // gun: chest height, just in front of the player
+  const [px, py, pz] = playerState.position;
+  const pos = new THREE.Vector3(px + dirX * 0.9, py + 0.4, pz + dirZ * 0.9);
+  const vel = new THREE.Vector3(dirX, 0, dirZ).multiplyScalar(BULLET_SPEED);
+
+  bullets.push({ pos, vel, life: BULLET_LIFETIME });
   if (bullets.length > MAX_BULLETS) bullets.shift();
 
   useGameStore.getState().consumeLight(SHOT_LIGHT_COST);
@@ -52,7 +37,7 @@ function shoot(camera) {
   flashTimer = FLASH_TIME;
 }
 
-export function updateCombat(camera, delta) {
+export function updateCombat(delta) {
   cooldown = Math.max(0, cooldown - delta);
   flashTimer = Math.max(0, flashTimer - delta);
 
@@ -60,13 +45,15 @@ export function updateCombat(camera, delta) {
   playerState.firing = firing;
 
   const { phase, light } = useGameStore.getState();
+  if (light < SHOT_LIGHT_COST) useGameStore.getState().restoreLight(100); // TEMP: remove in step 12
+
   if (
     firing &&
     cooldown === 0 &&
     phase === "playing" &&
     light >= SHOT_LIGHT_COST
   ) {
-    shoot(camera);
+    shoot();
   }
 
   // move bullets; remove old ones and ones that hit a wall

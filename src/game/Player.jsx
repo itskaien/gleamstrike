@@ -9,9 +9,9 @@ export default function Player() {
   const groupRef = useRef();
   const flashRef = useRef();
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     updateMovement(playerState, getKeys(), delta);
-    updateCombat(state.camera, delta);
+    updateCombat(delta);
 
     const g = groupRef.current;
     if (g) {

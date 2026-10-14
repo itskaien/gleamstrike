@@ -19,6 +19,7 @@ export function setupInput() {
     if (e.code === "KeyA") keys.left = true;
     if (e.code === "KeyD") keys.right = true;
     if (e.code === "Space") keys.dash = true;
+    if (e.code === "KeyF" && document.pointerLockElement) mouse.firing = true;
   };
 
   const handleKeyUp = (e) => {
@@ -27,6 +28,7 @@ export function setupInput() {
     if (e.code === "KeyA") keys.left = false;
     if (e.code === "KeyD") keys.right = false;
     if (e.code === "Space") keys.dash = false;
+    if (e.code === "KeyF") mouse.firing = false;
   };
 
   const handleMouseMove = (e) => {
@@ -35,7 +37,6 @@ export function setupInput() {
   };
 
   const handleMouseDown = (e) => {
-    // only count clicks once the mouse is captured (the first click just captures it)
     if (e.button === 0 && document.pointerLockElement) mouse.firing = true;
   };
   const handleMouseUp = (e) => {

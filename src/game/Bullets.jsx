@@ -31,8 +31,8 @@ export default function Bullets() {
       args={[null, null, MAX_BULLETS]}
       frustumCulled={false}
     >
-      <sphereGeometry args={[0.1, 8, 8]} />
-      <meshBasicMaterial color="#ffe08a" />
+      <sphereGeometry args={[0.15, 8, 8]} />
+      <meshBasicMaterial color="#ffe08a" fog={false} />
     </instancedMesh>
   );
 }
