@@ -3,4 +3,5 @@ export const playerState = {
   rotation: 0,
   cameraYaw: 0,
   firing: false,
+  shake: 0,
 };

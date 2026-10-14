@@ -36,3 +36,24 @@ canvas {
   background: #fff;
   border-radius: 50%;
 }
+
+.damage-flash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 45%,
+    rgba(255, 30, 60, 0.55) 100%
+  );
+  animation: damage-flash 0.4s ease-out forwards;
+}
+
+@keyframes damage-flash {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

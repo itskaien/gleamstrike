@@ -4,6 +4,7 @@ import { registerCollidable } from "../systems/collision";
 import CameraRig from "./CameraRig";
 import Bullets from "./Bullets";
 import Enemies from "./Enemies";
+import Effects from "./Effects";
 
 function Wall({ position, size = [4, 3, 1] }) {
   const ref = useRef();
@@ -35,6 +36,7 @@ export default function Scene() {
       <Wall position={[0, 1.5, -6]} />
 
       <Bullets />
+      <Effects />
       <CameraRig />
       <Enemies />
       <Player />

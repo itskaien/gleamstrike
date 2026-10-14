@@ -3,17 +3,20 @@ import { useGameStore } from "../store/gameStore";
 import { isFiring } from "./input";
 import { getCollidables, hitsWall } from "./collision";
 import { playerState } from "./playerState";
+import { damageEnemy, findBulletHit, raycastEnemies } from "./enemies";
+import { spawnBurst } from "./effects";
 
 const FIRE_INTERVAL = 0.15;
 const BULLET_SPEED = 80;
 const BULLET_LIFETIME = 1.5;
+const BULLET_DAMAGE = 10;
 export const MAX_BULLETS = 64;
 const SHOT_LIGHT_COST = 5;
-const AIM_RANGE = 120; // = speed * lifetime
+const AIM_RANGE = 120;
 const FLASH_TIME = 0.05;
-const AIM_HOLD = 0.4; // seconds the character keeps facing the aim after you stop
+const AIM_HOLD = 0.4;
 
-const bullets = []; // each: { pos, vel, life }
+const bullets = [];
 let cooldown = 0;
 let flashTimer = 0;
 let aimHold = 0;
@@ -22,35 +25,40 @@ const raycaster = new THREE.Raycaster();
 const screenCenter = new THREE.Vector2(0, 0);
 const aimPoint = new THREE.Vector3();
 const muzzle = new THREE.Vector3();
+const previous = new THREE.Vector3();
 
 export const getBullets = () => bullets;
 export const isMuzzleFlashing = () => flashTimer > 0;
 
 function shoot(camera) {
-  // Gun position: chest height, just in front of the player
   const yaw = playerState.cameraYaw;
   const [px, py, pz] = playerState.position;
   muzzle.set(px - Math.sin(yaw) * 0.9, py + 0.4, pz - Math.cos(yaw) * 0.9);
 
-  // 1. What is under the crosshair?
   camera.updateMatrixWorld();
   raycaster.setFromCamera(screenCenter, camera);
-  raycaster.near = camera.position.distanceTo(muzzle); // ignore stuff between camera and gun
+  raycaster.near = camera.position.distanceTo(muzzle);
   raycaster.far = AIM_RANGE;
 
   let aimDist = AIM_RANGE;
   const hits = raycaster.intersectObjects(getCollidables(), false);
   if (hits.length > 0) aimDist = hits[0].distance;
 
-  // the floor isn't in the collidables list, so check it directly
   const ray = raycaster.ray;
   if (ray.direction.y < 0) {
     const t = -ray.origin.y / ray.direction.y;
     if (t > 0 && t < aimDist) aimDist = t;
   }
+
+  const enemyDist = raycastEnemies(
+    ray.origin,
+    ray.direction,
+    raycaster.near,
+    aimDist,
+  );
+  if (enemyDist < aimDist) aimDist = enemyDist;
   ray.at(aimDist, aimPoint);
 
-  // 2. Fire from the gun toward that point
   const vel = aimPoint
     .clone()
     .sub(muzzle)
@@ -71,10 +79,10 @@ export function updateCombat(camera, delta) {
   const firing = isFiring();
   if (firing) aimHold = AIM_HOLD;
   else aimHold = Math.max(0, aimHold - delta);
-  playerState.firing = aimHold > 0; // movement.js uses this to face the aim
+  playerState.firing = aimHold > 0;
 
   const { phase, light } = useGameStore.getState();
-  if (light < SHOT_LIGHT_COST) useGameStore.getState().restoreLight(100); // TEMP: remove in step 12
+  if (light < SHOT_LIGHT_COST) useGameStore.getState().restoreLight(100);
 
   if (
     firing &&
@@ -85,11 +93,37 @@ export function updateCombat(camera, delta) {
     shoot(camera);
   }
 
-  // move bullets; remove old ones, ones in the floor, and ones that hit a wall
   for (let i = bullets.length - 1; i >= 0; i--) {
     const b = bullets[i];
+    previous.copy(b.pos);
     b.pos.addScaledVector(b.vel, delta);
     b.life -= delta;
-    if (b.life <= 0 || b.pos.y <= 0 || hitsWall(b.pos)) bullets.splice(i, 1);
+
+    const hit = findBulletHit(previous, b.pos);
+    if (hit) {
+      damageEnemy(hit.enemy, BULLET_DAMAGE);
+      spawnBurst(
+        previous.x + (b.pos.x - previous.x) * hit.t,
+        previous.y + (b.pos.y - previous.y) * hit.t,
+        previous.z + (b.pos.z - previous.z) * hit.t,
+        { count: 10, color: "#ff5577", speed: 5, life: 0.35 },
+      );
+      bullets.splice(i, 1);
+      continue;
+    }
+
+    if (b.pos.y <= 0 || hitsWall(b.pos)) {
+      spawnBurst(b.pos.x, Math.max(b.pos.y, 0.05), b.pos.z, {
+        count: 6,
+        color: "#ffe08a",
+        speed: 3,
+        life: 0.25,
+        size: 0.7,
+      });
+      bullets.splice(i, 1);
+      continue;
+    }
+
+    if (b.life <= 0) bullets.splice(i, 1);
   }
 }

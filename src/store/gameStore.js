@@ -9,6 +9,7 @@ export const useGameStore = create((set) => ({
   light: MAX_LIGHT,
   score: 0,
   wave: 1,
+  damageCount: 0,
 
   damagePlayer: (amount) =>
     set((state) => {
@@ -16,19 +17,16 @@ export const useGameStore = create((set) => ({
       const health = Math.max(0, state.health - amount);
       return {
         health,
+        damageCount: state.damageCount + 1,
         phase: health <= 0 ? "gameover" : state.phase,
       };
     }),
 
   consumeLight: (amount) =>
-    set((state) => ({
-      light: Math.max(0, state.light - amount),
-    })),
+    set((state) => ({ light: Math.max(0, state.light - amount) })),
 
   restoreLight: (amount) =>
-    set((state) => ({
-      light: Math.min(MAX_LIGHT, state.light + amount),
-    })),
+    set((state) => ({ light: Math.min(MAX_LIGHT, state.light + amount) })),
 
   addScore: (points) => set((state) => ({ score: state.score + points })),
 
@@ -41,5 +39,6 @@ export const useGameStore = create((set) => ({
       light: MAX_LIGHT,
       score: 0,
       wave: 1,
+      damageCount: 0,
     }),
 }));

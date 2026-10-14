@@ -15,6 +15,8 @@ export default function Enemies() {
   useEffect(() => {
     resetEnemies(); // also keeps dev double-mounting from spawning two
     spawnEnemy(8, -10);
+    spawnEnemy(-8, -12);
+    spawnEnemy(0, -16);
   }, []);
 
   return Array.from({ length: MAX_ENEMIES }, (_, i) => (
