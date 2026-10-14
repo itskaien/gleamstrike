@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { registerCollidable } from "../systems/collision";
 import CameraRig from "./CameraRig";
 import Bullets from "./Bullets";
+import Enemies from "./Enemies";
 
 function Wall({ position, size = [4, 3, 1] }) {
   const ref = useRef();
@@ -35,6 +36,7 @@ export default function Scene() {
 
       <Bullets />
       <CameraRig />
+      <Enemies />
       <Player />
     </>
   );
