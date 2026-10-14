@@ -38,7 +38,7 @@ export default function Player() {
 
       <mesh ref={flashRef} position={[0, 0.4, 0.9]} visible={false}>
         <sphereGeometry args={[0.18, 8, 8]} />
-        <meshBasicMaterial color="#ffd966" />
+        <meshBasicMaterial color="#f0f0ec" />
       </mesh>
     </group>
   );

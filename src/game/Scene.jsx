@@ -12,7 +12,7 @@ function Wall({ position, size = [4, 3, 1] }) {
   return (
     <mesh ref={ref} position={position}>
       <boxGeometry args={size} />
-      <meshStandardMaterial color="#445" />
+      <meshStandardMaterial color="#343638" />
     </mesh>
   );
 }
@@ -20,15 +20,15 @@ function Wall({ position, size = [4, 3, 1] }) {
 export default function Scene() {
   return (
     <>
-      <color attach="background" args={["#0a0a0f"]} />
-      <fog attach="fog" args={["#0a0a0f", 15, 45]} />
+      <color attach="background" args={["#101112"]} />
+      <fog attach="fog" args={["#101112", 15, 45]} />
 
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 10, 5]} intensity={1} />
 
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[50, 50]} />
-        <meshStandardMaterial color="#333" />
+        <meshStandardMaterial color="#101112" />
       </mesh>
 
       <gridHelper args={[50, 50, "#999", "#444"]} position={[0, 0.01, 0]} />

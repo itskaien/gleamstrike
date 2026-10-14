@@ -106,7 +106,7 @@ export function updateCombat(camera, delta) {
         previous.x + (b.pos.x - previous.x) * hit.t,
         previous.y + (b.pos.y - previous.y) * hit.t,
         previous.z + (b.pos.z - previous.z) * hit.t,
-        { count: 10, color: "#ff5577", speed: 5, life: 0.35 },
+        { count: 10, color: "#b41e1e", speed: 5, life: 0.35 },
       );
       bullets.splice(i, 1);
       continue;
@@ -115,7 +115,7 @@ export function updateCombat(camera, delta) {
     if (b.pos.y <= 0 || hitsWall(b.pos)) {
       spawnBurst(b.pos.x, Math.max(b.pos.y, 0.05), b.pos.z, {
         count: 6,
-        color: "#ffe08a",
+        color: "#f0f0ec",
         speed: 3,
         life: 0.25,
         size: 0.7,

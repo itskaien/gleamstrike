@@ -19,7 +19,7 @@ export default function Enemy({ index }) {
     g.visible = true;
     g.position.set(e.position[0], e.position[1], e.position[2]);
     g.rotation.y = e.rotation;
-    bodyRef.current.emissive.set(e.hitTimer > 0 ? "#ffffff" : "#3a0516");
+    bodyRef.current.emissive.set(e.hitTimer > 0 ? "#f0f0ec" : "#000000");
   });
 
   return (
@@ -28,14 +28,14 @@ export default function Enemy({ index }) {
         <capsuleGeometry args={[0.5, 1, 4, 8]} />
         <meshStandardMaterial
           ref={bodyRef}
-          color="#8b1e3f"
-          emissive="#3a0516"
+          color="#656565"
+          emissive="#000000"
         />
       </mesh>
 
       <mesh position={[0, 0.5, 0.45]}>
         <boxGeometry args={[0.5, 0.15, 0.2]} />
-        <meshBasicMaterial color="#ff3355" />
+        <meshBasicMaterial color="#f0f0ec" />
       </mesh>
     </group>
   );

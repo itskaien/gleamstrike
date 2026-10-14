@@ -118,7 +118,7 @@ export function updateEnemies(delta) {
       useGameStore.getState().addScore(KILL_SCORE);
       spawnBurst(e.position[0], e.position[1], e.position[2], {
         count: 24,
-        color: "#ff3355",
+        color: "#b41e1e",
         speed: 6,
         life: 0.6,
         size: 1.6,
