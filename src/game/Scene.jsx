@@ -1,4 +1,18 @@
 import Player from "./Player";
+import { useEffect, useRef } from "react";
+import { registerCollidable } from "../systems/collision";
+import CameraRig from "./CameraRig";
+
+function Wall({ position, size = [4, 3, 1] }) {
+  const ref = useRef();
+  useEffect(() => registerCollidable(ref.current), []);
+  return (
+    <mesh ref={ref} position={position}>
+      <boxGeometry args={size} />
+      <meshStandardMaterial color="#445" />
+    </mesh>
+  );
+}
 
 export default function Scene() {
   return (
@@ -16,6 +30,9 @@ export default function Scene() {
 
       <gridHelper args={[50, 50, "#999", "#444"]} position={[0, 0.01, 0]} />
 
+      <Wall position={[0, 1.5, -6]} />
+
+      <CameraRig />
       <Player />
     </>
   );

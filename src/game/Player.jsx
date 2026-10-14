@@ -1,19 +1,14 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { getKeys } from "../systems/input";
+import { playerState } from "../systems/playerState";
 
 export default function Player() {
   const meshRef = useRef();
 
-  const player = useRef({
-    position: [0, 1, 0],
-    rotation: 0,
-    velocity: [0, 0, 0],
-  });
-
   useFrame((_, delta) => {
     const keys = getKeys();
-    const p = player.current;
+    const p = playerState;
 
     let x = 0;
     let z = 0;

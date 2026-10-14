@@ -7,7 +7,7 @@ export default function App() {
   useEffect(() => setupInput(), []);
 
   return (
-    <Canvas camera={{ position: [0, 6, 10], fov: 60 }}>
+    <Canvas onClick={(e) => e.target.requestPointerLock?.()}>
       <Scene />
     </Canvas>
   );
