@@ -9,6 +9,7 @@ const keys = {
 const mouse = {
   deltaX: 0,
   deltaY: 0,
+  firing: false,
 };
 
 export function setupInput() {
@@ -33,6 +34,21 @@ export function setupInput() {
     mouse.deltaY += e.movementY;
   };
 
+  const handleMouseDown = (e) => {
+    // only count clicks once the mouse is captured (the first click just captures it)
+    if (e.button === 0 && document.pointerLockElement) mouse.firing = true;
+  };
+  const handleMouseUp = (e) => {
+    if (e.button === 0) mouse.firing = false;
+  };
+  const handleLockChange = () => {
+    if (!document.pointerLockElement) mouse.firing = false;
+  };
+
+  window.addEventListener("mousedown", handleMouseDown);
+  window.addEventListener("mouseup", handleMouseUp);
+  document.addEventListener("pointerlockchange", handleLockChange);
+
   window.addEventListener("keydown", handleKeyDown);
   window.addEventListener("keyup", handleKeyUp);
   window.addEventListener("mousemove", handleMouseMove);
@@ -41,7 +57,14 @@ export function setupInput() {
     window.removeEventListener("keydown", handleKeyDown);
     window.removeEventListener("keyup", handleKeyUp);
     window.removeEventListener("mousemove", handleMouseMove);
+    window.removeEventListener("mousedown", handleMouseDown);
+    window.removeEventListener("mouseup", handleMouseUp);
+    document.removeEventListener("pointerlockchange", handleLockChange);
   };
+}
+
+export function isFiring() {
+  return mouse.firing;
 }
 
 export function getKeys() {

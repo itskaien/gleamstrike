@@ -49,13 +49,17 @@ export function updateMovement(p, keys, delta) {
     vz = dash.z * DASH_SPEED;
   }
 
-  if (vx !== 0 || vz !== 0) {
+  // Turn the character toward where it's moving
+  if (p.firing) {
+    p.rotation = p.cameraYaw + Math.PI;
+  } else if (vx !== 0 || vz !== 0) {
     const target = Math.atan2(vx, vz);
     let diff = target - p.rotation;
     diff = Math.atan2(Math.sin(diff), Math.cos(diff));
     p.rotation += diff * (1 - Math.exp(-TURN_SPEED * delta));
   }
 
+  // Move, then collide
   p.position[0] += vx * delta;
   p.position[2] += vz * delta;
 
@@ -63,5 +67,5 @@ export function updateMovement(p, keys, delta) {
   p.position[2] = Math.max(-ARENA_LIMIT, Math.min(ARENA_LIMIT, p.position[2]));
   resolveWalls(p.position, PLAYER_RADIUS);
 
-  p.position[1] = GROUND_Y;
+  p.position[1] = GROUND_Y; // ground "collision": always standing on the floor
 }

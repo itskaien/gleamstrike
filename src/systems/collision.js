@@ -39,3 +39,10 @@ export function resolveWalls(pos, radius) {
     }
   }
 }
+
+export function hitsWall(point) {
+  for (const box of colliders.values()) {
+    if (box.containsPoint(point)) return true;
+  }
+  return false;
+}
