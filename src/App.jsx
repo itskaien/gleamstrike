@@ -3,6 +3,8 @@ import { Canvas } from "@react-three/fiber";
 import { setupInput } from "./systems/input";
 import Scene from "./game/Scene";
 import Crosshair from "./ui/Crosshair";
+import DamageFlash from "./ui/DamageFlash";
+import GameOver from "./ui/GameOver";
 
 export default function App() {
   useEffect(() => setupInput(), []);
@@ -13,6 +15,8 @@ export default function App() {
         <Scene />
       </Canvas>
       <Crosshair />
+      <DamageFlash />
+      <GameOver />
     </>
   );
 }

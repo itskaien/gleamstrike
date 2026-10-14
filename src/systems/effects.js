@@ -49,3 +49,7 @@ export function updateEffects(delta) {
     }
   }
 }
+
+export function clearEffects() {
+  particles.length = 0;
+}

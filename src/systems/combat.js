@@ -127,3 +127,10 @@ export function updateCombat(camera, delta) {
     if (b.life <= 0) bullets.splice(i, 1);
   }
 }
+
+export function resetCombat() {
+  bullets.length = 0;
+  cooldown = 0;
+  flashTimer = 0;
+  aimHold = 0;
+}

@@ -7,6 +7,7 @@ export const MAX_ENEMIES = 16;
 export const ENEMY_RADIUS = 0.5;
 export const ENEMY_HEIGHT = 2;
 
+const KILL_SCORE = 100;
 const SPEED = 2.5;
 const MAX_HEALTH = 30;
 const GROUND_Y = 1;
@@ -114,6 +115,7 @@ export function updateEnemies(delta) {
     const e = enemies[i];
 
     if (e.health <= 0) {
+      useGameStore.getState().addScore(KILL_SCORE);
       spawnBurst(e.position[0], e.position[1], e.position[2], {
         count: 24,
         color: "#ff3355",
