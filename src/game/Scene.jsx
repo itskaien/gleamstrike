@@ -6,6 +6,7 @@ import Bullets from "./Bullets";
 import Enemies from "./Enemies";
 import Effects from "./Effects";
 import EnemyBullets from "./EnemyBullets";
+import Pickups from "./Pickups";
 
 function Wall({ position, size = [4, 3, 1] }) {
   const ref = useRef();
@@ -39,6 +40,7 @@ export default function Scene() {
       <Bullets />
       <EnemyBullets />
       <Effects />
+      <Pickups />
       <CameraRig />
       <Enemies />
       <Player />

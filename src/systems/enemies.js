@@ -2,6 +2,7 @@ import { useGameStore } from "../store/gameStore";
 import { playerState } from "./playerState";
 import { resolveWalls, hitsWall, segmentBlocked } from "./collision";
 import { spawnBurst } from "./effects";
+import { spawnPickup } from "./pickups";
 
 export const MAX_ENEMIES = 16;
 export const MAX_ENEMY_BULLETS = 64;
@@ -315,6 +316,7 @@ export function updateEnemies(delta) {
 
     if (e.health <= 0) {
       useGameStore.getState().addScore(TYPES[e.type].score);
+      spawnPickup(e.position[0], e.position[2]);
       spawnBurst(e.position[0], e.position[1], e.position[2], {
         count: 24,
         color: "#b41e1e",

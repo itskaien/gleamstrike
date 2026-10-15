@@ -3,6 +3,7 @@ import { playerState } from "./playerState";
 import { resetEnemies } from "./enemies";
 import { resetCombat } from "./combat";
 import { clearEffects } from "./effects";
+import { resetPickups } from "./pickups";
 
 export function restartGame() {
   playerState.position[0] = 0;
@@ -15,5 +16,6 @@ export function restartGame() {
   resetEnemies();
   resetCombat();
   clearEffects();
+  resetPickups();
   useGameStore.getState().resetGame();
 }

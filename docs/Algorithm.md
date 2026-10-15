@@ -270,7 +270,7 @@ START GleamStrike
 
 29. RECORD DEMO
     - Record 30–60 second gameplay clip
-    - Show movement, shooting, light mechanic, waves, game over
+    - Show movement, shooting, ammo, waves, game over
 
 30. SHIP V1
     - Publish link
