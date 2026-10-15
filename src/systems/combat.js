@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useGameStore } from "../store/gameStore";
-import { isFiring, consumeReload } from "./input";
+import { isFiring, consumeShot, consumeReload } from "./input";
 import { getCollidables, hitsWall } from "./collision";
 import { playerState } from "./playerState";
 import { damageEnemy, findBulletHit, raycastEnemies } from "./enemies";
@@ -78,7 +78,7 @@ export function updateCombat(camera, delta) {
   cooldown = Math.max(0, cooldown - delta);
   flashTimer = Math.max(0, flashTimer - delta);
 
-  const firing = isFiring();
+  const firing = isFiring() || consumeShot();
   if (firing) aimHold = AIM_HOLD;
   else aimHold = Math.max(0, aimHold - delta);
   playerState.firing = aimHold > 0;

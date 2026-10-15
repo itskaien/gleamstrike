@@ -10,6 +10,7 @@ const mouse = {
   deltaX: 0,
   deltaY: 0,
   firing: false,
+  shotQueued: false,
 };
 
 let reloadQueued = false;
@@ -20,7 +21,10 @@ export function setupInput() {
     if (e.code === "KeyS") keys.backward = true;
     if (e.code === "KeyA") keys.left = true;
     if (e.code === "KeyD") keys.right = true;
-    if (e.code === "Space") keys.dash = true;
+    if (e.code === "Space") {
+      keys.dash = true;
+      e.preventDefault();
+    }
     if (e.code === "KeyR" && !e.repeat) reloadQueued = true;
     if (e.code === "KeyF" && document.pointerLockElement) mouse.firing = true;
   };
@@ -40,22 +44,26 @@ export function setupInput() {
   };
 
   const handleMouseDown = (e) => {
-    if (e.button === 0 && document.pointerLockElement) mouse.firing = true;
+    if (e.button === 0 && document.pointerLockElement) {
+      mouse.firing = true;
+      mouse.shotQueued = true;
+    }
   };
+
   const handleMouseUp = (e) => {
     if (e.button === 0) mouse.firing = false;
   };
+
   const handleLockChange = () => {
     if (!document.pointerLockElement) mouse.firing = false;
   };
 
-  window.addEventListener("mousedown", handleMouseDown);
-  window.addEventListener("mouseup", handleMouseUp);
-  document.addEventListener("pointerlockchange", handleLockChange);
-
   window.addEventListener("keydown", handleKeyDown);
   window.addEventListener("keyup", handleKeyUp);
   window.addEventListener("mousemove", handleMouseMove);
+  window.addEventListener("mousedown", handleMouseDown);
+  window.addEventListener("mouseup", handleMouseUp);
+  document.addEventListener("pointerlockchange", handleLockChange);
 
   return () => {
     window.removeEventListener("keydown", handleKeyDown);
@@ -67,12 +75,24 @@ export function setupInput() {
   };
 }
 
+export function getKeys() {
+  return keys;
+}
+
 export function isFiring() {
   return mouse.firing;
 }
 
-export function getKeys() {
-  return keys;
+export function consumeShot() {
+  const queued = mouse.shotQueued;
+  mouse.shotQueued = false;
+  return queued;
+}
+
+export function consumeReload() {
+  const queued = reloadQueued;
+  reloadQueued = false;
+  return queued;
 }
 
 export function consumeMouseDelta() {
@@ -80,10 +100,4 @@ export function consumeMouseDelta() {
   mouse.deltaX = 0;
   mouse.deltaY = 0;
   return delta;
-}
-
-export function consumeReload() {
-  const queued = reloadQueued;
-  reloadQueued = false;
-  return queued;
 }

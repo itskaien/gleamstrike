@@ -16,9 +16,9 @@ export default function Enemies() {
 
   useEffect(() => {
     resetEnemies();
-    spawnEnemy(8, -10);
-    spawnEnemy(-8, -12);
-    spawnEnemy(0, -16);
+    spawnEnemy(8, -10, "chaser");
+    spawnEnemy(-8, -14, "shooter");
+    spawnEnemy(9, -16, "shooter");
   }, [runId]);
 
   return Array.from({ length: MAX_ENEMIES }, (_, i) => (

@@ -46,3 +46,19 @@ export function hitsWall(point) {
   }
   return false;
 }
+
+export function segmentBlocked(ax, ay, az, bx, by, bz) {
+  const dx = bx - ax;
+  const dy = by - ay;
+  const dz = bz - az;
+  const steps = Math.ceil(Math.hypot(dx, dy, dz) / 0.5);
+  const point = { x: 0, y: 0, z: 0 };
+  for (let i = 1; i < steps; i++) {
+    const t = i / steps;
+    point.x = ax + dx * t;
+    point.y = ay + dy * t;
+    point.z = az + dz * t;
+    if (hitsWall(point)) return true;
+  }
+  return false;
+}
